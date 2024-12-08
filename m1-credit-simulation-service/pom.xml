@@ -12,13 +12,27 @@
 		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/main
+>>>>>>> origin/main
 	<groupId>com.example</groupId>
 	<artifactId>m1-credit-simulation-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>m1-credit-simulation-service</name>
 	<description>M1 - Credit Simulation Service</description>
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/main
+>>>>>>> origin/main
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.6</spring-cloud.version> <!-- Updated to a compatible version -->
