@@ -1,11 +1,15 @@
-package com.mingeso.m1creditsimulationservice;
+package com.example.creditsimulation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
+/**
+ * Main application class for the Credit Simulation Service.
+ * Enables Discovery Client for service registration with Eureka.
+ */
 @SpringBootApplication
-@EnableEurekaClient
+@EnableDiscoveryClient
 public class M1CreditSimulationServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(M1CreditSimulationServiceApplication.class, args);
