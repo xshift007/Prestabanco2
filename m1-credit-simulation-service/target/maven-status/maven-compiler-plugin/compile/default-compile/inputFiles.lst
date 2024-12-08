@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\repositories\CreditSimulationRepository.java
 C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\M1CreditSimulationServiceApplication.java
 C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\services\CreditSimulationService.java
 C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\controllers\CreditSimulationController.java
+=======
+C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\controllers\SimulationController.java
+C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\repositories\CreditSimulationRepository.java
+C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\M1CreditSimulationServiceApplication.java
+C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\services\SimulationService.java
+>>>>>>> origin/main
 C:\Users\cocan\Downloads\tingeso\presta_banco_2\Prestabanco2\m1-credit-simulation-service\src\main\java\com\example\creditsimulation\entity\CreditSimulation.java
