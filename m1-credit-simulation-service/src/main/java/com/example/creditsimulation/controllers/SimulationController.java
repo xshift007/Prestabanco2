@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/")
-public class CreditSimulationController {
+public class SimulationController {
 
     @Autowired
     private CreditSimulationService service;
