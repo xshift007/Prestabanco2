@@ -1,6 +1,0 @@
-com\example\creditsimulation\M1CreditSimulationServiceApplication.class
-com\example\creditsimulation\entity\CreditSimulation.class
-com\example\creditsimulation\controller\SimulationController.class
-com\example\creditsimulation\repository\CreditSimulationRepository.class
-com\example\creditsimulation\controller\SimulationController$SimulationRequest.class
-com\example\creditsimulation\service\CreditSimulationService.class
