@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: eureka-server
-          image: xsh1ft/eureka-server
+          image: xsh1ft/eureka-server:1.0
           ports:
             - containerPort: 8761
 ---

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: xsh1ft/config-server
+          image: xsh1ft/config-server:1.0
           ports:
             - containerPort: 8888
 ---
