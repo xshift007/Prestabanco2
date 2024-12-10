@@ -23,22 +23,6 @@ spring:
           uri: lb://m2-user-registration-service:8091
           predicates:
             - Path=/users/**
-        #- id: m3-loan-application-service
-        #  uri: lb://m3-loan-application-service
-        #  predicates:
-        #    - Path=/loan-applications/**
-        #- id: m4-loan-evaluation-service
-        #  uri: lb://m4-loan-evaluation-service
-        #  predicates:
-       #    - Path=/loan-evaluation/**
-        #- id: m5-loan-tracking-service
-        #  uri: lb://m5-loan-tracking-service
-        #  predicates:
-        #    - Path=/tracking/**
-        #- id: m6-cost-calculation-service
-        #  uri: lb://m6-cost-calculation-service
-        #  predicates:
-        #    - Path=/cost/**
     globalcors:
       cors-configurations:
         '[/**]':

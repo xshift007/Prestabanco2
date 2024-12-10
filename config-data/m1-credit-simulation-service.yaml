@@ -5,6 +5,7 @@ spring:
     url: jdbc:mysql://db-m1:3306/m1db?useSSL=false
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update

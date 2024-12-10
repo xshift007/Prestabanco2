@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: PersistentVolume
+metadata:
+  name: m1-db-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/m1-db-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: m1-db-pvc
+  labels:
+    app: mysql
+    tier: database
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: m1-db-deployment
+  labels:
+    app: m1-db-deployment
+    tier: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: m1-db-deployment
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: m1-db-deployment
+        tier: database
+    spec:
+      containers:
+        - name: m1-db
+          image: mysql:8.0
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_PASSWORD_M1
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_DBNAME_M1
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_USER_M1
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_PASSWORD_M1
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: m1-db-data
+            - mountPath: /docker-entrypoint-initdb.d/init.sql
+              name: m1-db-sql
+              subPath: m1-db.sql
+      volumes:
+        - name: m1-db-data
+          persistentVolumeClaim:
+            claimName: m1-db-pvc
+        - name: m1-db-sql
+          configMap:
+            name: m1-db-sql-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: m1-db-service
+  labels:
+    app: m1-db-service
+    tier: database
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+      protocol: TCP
+  selector:
+    app: m1-db-deployment
+    tier: database
+  type: ClusterIP
