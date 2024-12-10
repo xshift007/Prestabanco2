@@ -1,75 +1,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: m2-user-registration-service-deployment
+  name: m2-db-deployment
   labels:
-    app: m2-user-registration-service
+    app: m2-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: m2-user-registration-service
+      app: m2-db
   template:
     metadata:
       labels:
-        app: m2-user-registration-service
+        app: m2-db
     spec:
       containers:
-        - name: m2-user-registration-service
-          image: xsh1ft/m2-user-registration-service:1.0
-          ports:
-            - containerPort: 8080
+        - name: m2-db
+          image: mysql:8.0
           env:
-            # Variables desde ConfigMap
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: mysql-config-map
-                  key: DB_HOST_M2
-
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: mysql-config-map
-                  key: DB_PORT_M2
-
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: mysql-config-map
-                  key: DB_DBNAME_M2
-
-            # Variables desde Secret
-            - name: DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: DB_USER_M2
-            - name: DB_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-credentials
                   key: DB_PASSWORD_M2
-
-            # Config Server y Eureka
-            - name: SPRING_CONFIG_IMPORT
-              value: "configserver:http://config-server-service:8888"
-            - name: SPRING_CLOUD_CONFIG_ENABLED
-              value: "true"
-            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-              value: "http://eureka-server-service:8761/eureka/"
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_DBNAME_M2
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_USER_M2
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_PASSWORD_M2
+          ports:
+            - containerPort: 3306
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: m2-user-registration-service
+  name: m2-db-service
   labels:
-    app: m2-user-registration-service
+    app: m2-db
 spec:
   selector:
-    app: m2-user-registration-service
+    app: m2-db
   ports:
-    - name: http
-      port: 8080
-      targetPort: 8080
-  type: LoadBalancer
+    - port: 3306
+      targetPort: 3306
+  type: ClusterIP
