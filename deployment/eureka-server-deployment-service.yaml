@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: eureka-server
-          image: polloh/eureka-server
+          image: xsh1ft/eureka-server
           ports:
             - containerPort: 8761
 ---

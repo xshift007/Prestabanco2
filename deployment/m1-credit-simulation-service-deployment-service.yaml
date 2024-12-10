@@ -21,6 +21,12 @@ spec:
             - containerPort: 8080
           env:
             # Variables desde ConfigMap (host y nombre de BD)
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_PORT_M1
+
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
