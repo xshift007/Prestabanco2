@@ -2,9 +2,9 @@ spring:
   application:
     name: m2-user-registration-service
   datasource:
-    url: jdbc:mysql://db-m2:3306/m2db?useSSL=false
-    username: ${DB_USER_M2}
-    password: ${DB_PASSWORD_M2}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

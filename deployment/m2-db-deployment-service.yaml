@@ -26,6 +26,13 @@ spec:
                 configMapKeyRef:
                   name: mysql-config-map
                   key: DB_HOST_M2
+
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_PORT_M2
+
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
@@ -44,29 +51,13 @@ spec:
                   name: mysql-credentials
                   key: DB_PASSWORD_M2
 
-            # Config Server
+            # Config Server y Eureka
             - name: SPRING_CONFIG_IMPORT
               value: "configserver:http://config-server-service:8888"
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "true"
-
-            # Eureka
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://eureka-server-service:8761/eureka/"
-
-            # Opcionalmente inyectar URL BD
-            - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?useSSL=false"
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: DB_USER_M2
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: DB_PASSWORD_M2
 ---
 apiVersion: v1
 kind: Service
