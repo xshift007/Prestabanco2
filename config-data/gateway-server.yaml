@@ -1,6 +1,8 @@
 server:
   port: 8080
 eureka:
+  instance:
+    hostname: localhost
   client:
     fetch-registry: true
     register-with-eureka: true
@@ -14,29 +16,29 @@ spring:
           enabled: true
       routes:
         - id: m1-credit-simulation-service
-          uri: lb://m1-credit-simulation-service
+          uri: lb://m1-credit-simulation-service:8090
           predicates:
             - Path=/simulate/**
         - id: m2-user-registration-service
-          uri: lb://m2-user-registration-service
+          uri: lb://m2-user-registration-service:8091
           predicates:
             - Path=/users/**
-        - id: m3-loan-application-service
-          uri: lb://m3-loan-application-service
-          predicates:
-            - Path=/loan-applications/**
-        - id: m4-loan-evaluation-service
-          uri: lb://m4-loan-evaluation-service
-          predicates:
-            - Path=/loan-evaluation/**
-        - id: m5-loan-tracking-service
-          uri: lb://m5-loan-tracking-service
-          predicates:
-            - Path=/tracking/**
-        - id: m6-cost-calculation-service
-          uri: lb://m6-cost-calculation-service
-          predicates:
-            - Path=/cost/**
+        #- id: m3-loan-application-service
+        #  uri: lb://m3-loan-application-service
+        #  predicates:
+        #    - Path=/loan-applications/**
+        #- id: m4-loan-evaluation-service
+        #  uri: lb://m4-loan-evaluation-service
+        #  predicates:
+       #    - Path=/loan-evaluation/**
+        #- id: m5-loan-tracking-service
+        #  uri: lb://m5-loan-tracking-service
+        #  predicates:
+        #    - Path=/tracking/**
+        #- id: m6-cost-calculation-service
+        #  uri: lb://m6-cost-calculation-service
+        #  predicates:
+        #    - Path=/cost/**
     globalcors:
       cors-configurations:
         '[/**]':
