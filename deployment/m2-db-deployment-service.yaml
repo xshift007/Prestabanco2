@@ -1,107 +1,84 @@
 apiVersion: apps/v1
-kind: PersistentVolume
-metadata:
-  name: m2-db-pv
-  labels:
-    type: local
-spec:
-  storageClassName: standard
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/data/m2-db-data"
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: m2-db-pvc
-  labels:
-    app: mysql
-    tier: database
-spec:
-  storageClassName: standard
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: m2-db-deployment
+  name: m2-user-registration-service-deployment
   labels:
-    app: m2-db-deployment
-    tier: database
+    app: m2-user-registration-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: m2-db-deployment
-  strategy:
-    type: Recreate
+      app: m2-user-registration-service
   template:
     metadata:
       labels:
-        app: m2-db-deployment
-        tier: database
+        app: m2-user-registration-service
     spec:
       containers:
-        - name: m2-db
-          image: mysql:8.0
-          imagePullPolicy: "IfNotPresent"
+        - name: m2-user-registration-service
+          image: xsh1ft/m2-user-registration-service:1.0
           ports:
-            - containerPort: 3306
+            - containerPort: 8080
           env:
-            - name: MYSQL_ROOT_PASSWORD
+            # Variables desde ConfigMap
+            - name: DB_HOST
               valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: DB_PASSWORD_M2
-            - name: MYSQL_DATABASE
+                configMapKeyRef:
+                  name: mysql-config-map
+                  key: DB_HOST_M2
+            - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
                   name: mysql-config-map
                   key: DB_DBNAME_M2
-            - name: MYSQL_USER
+
+            # Variables desde Secret
+            - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: mysql-credentials
                   key: DB_USER_M2
-            - name: MYSQL_PASSWORD
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-credentials
                   key: DB_PASSWORD_M2
-          volumeMounts:
-            - mountPath: /var/lib/mysql
-              name: m2-db-data
-            - mountPath: /docker-entrypoint-initdb.d/init.sql
-              name: m2-db-sql
-              subPath: m2-db.sql
-      volumes:
-        - name: m2-db-data
-          persistentVolumeClaim:
-            claimName: m2-db-pvc
-        - name: m2-db-sql
-          configMap:
-            name: m2-db-sql-config
+
+            # Config Server
+            - name: SPRING_CONFIG_IMPORT
+              value: "configserver:http://config-server-service:8888"
+            - name: SPRING_CLOUD_CONFIG_ENABLED
+              value: "true"
+
+            # Eureka
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eureka-server-service:8761/eureka/"
+
+            # Opcionalmente inyectar URL BD
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?useSSL=false"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_USER_M2
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_PASSWORD_M2
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: m2-db-service
+  name: m2-user-registration-service
   labels:
-    app: m2-db-service
-    tier: database
+    app: m2-user-registration-service
 spec:
-  ports:
-    - port: 3306
-      targetPort: 3306
-      protocol: TCP
   selector:
-    app: m2-db-deployment
-    tier: database
-  type: ClusterIP
+    app: m2-user-registration-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
