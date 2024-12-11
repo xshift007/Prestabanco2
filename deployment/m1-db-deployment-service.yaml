@@ -28,15 +28,19 @@ spec:
                 configMapKeyRef:
                   name: mysql-config-map
                   key: DB_DBNAME_M1
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_USER_M1
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: DB_PASSWORD_M1
             - name: MYSQL_ROOT_HOST
               value: "%"
-            # Eliminamos las siguientes líneas porque ya no usamos MYSQL_USER
-            # - name: MYSQL_USER
-            # - name: MYSQL_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: mysql-credentials
-            #       key: DB_PASSWORD_M1
+
           ports:
             - containerPort: 3306
 ---
