@@ -27,6 +27,11 @@ spec:
                   name: mysql-config-map
                   key: DB_PORT_M1
 
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:

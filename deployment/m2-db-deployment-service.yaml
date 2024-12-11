@@ -24,6 +24,11 @@ spec:
                 secretKeyRef:
                   name: mysql-credentials
                   key: DB_PASSWORD_M2
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
             - name: MYSQL_DATABASE
               valueFrom:
                 configMapKeyRef:
