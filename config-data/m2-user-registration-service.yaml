@@ -21,4 +21,4 @@ eureka:
       defaultZone: http://eureka-server-service:8761/eureka/
   instance:
     preferIpAddress: true
-    ip-address: ${POD_IP}
+    #ip-address: ${POD_IP}
