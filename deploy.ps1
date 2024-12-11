@@ -7,26 +7,38 @@ Param(
 # Establecer que el script se detenga si hay errores
 $ErrorActionPreference = "Stop"
 
-Write-Host "Compilando proyectos con Maven..."
-cmd /c "mvn clean install -DskipTests"
+# Definir los directorios de los microservicios
+$services = @(
+    "config-server",
+    "eureka-server",
+    "gateway-server",
+    "m1-credit-simulation-service",
+    "m2-user-registration-service"
+)
+
+# Función para compilar un microservicio
+function Build-Service($service) {
+    Write-Host "Compilando $service con Maven..."
+    Set-Location .\$service
+    cmd /c "mvn clean install -DskipTests"
+    Set-Location ..
+}
+
+# Compilar cada microservicio
+foreach ($service in $services) {
+    Build-Service $service
+}
+
+# Volver al directorio raíz
+Set-Location .
 
 Write-Host "Construyendo y subiendo imágenes Docker..."
-# Asegúrate de que los Dockerfile y pom.xml estén correctos
-# Ajusta los paths si es necesario
-docker build -t $DOCKER_USER/config-server:$VERSION ./config-server
-docker push $DOCKER_USER/config-server:$VERSION
-
-docker build -t $DOCKER_USER/eureka-server:$VERSION ./eureka-server
-docker push $DOCKER_USER/eureka-server:$VERSION
-
-docker build -t $DOCKER_USER/gateway-server:$VERSION ./gateway-server
-docker push $DOCKER_USER/gateway-server:$VERSION
-
-docker build -t $DOCKER_USER/m1-credit-simulation-service:$VERSION ./m1-credit-simulation-service
-docker push $DOCKER_USER/m1-credit-simulation-service:$VERSION
-
-docker build -t $DOCKER_USER/m2-user-registration-service:$VERSION ./m2-user-registration-service
-docker push $DOCKER_USER/m2-user-registration-service:$VERSION
+foreach ($service in $services) {
+    Write-Host "Construyendo imagen para $service..."
+    docker build -t "${DOCKER_USER}/${service}:${VERSION}" .\$service
+    Write-Host "Subiendo imagen ${DOCKER_USER}/${service}:${VERSION}..."
+    docker push "${DOCKER_USER}/${service}:${VERSION}"
+}
 
 Write-Host "Aplicando ConfigMaps y Secrets..."
 kubectl apply -f deployment/mysql-config-map.yaml -n $NAMESPACE
@@ -50,25 +62,25 @@ kubectl apply -f deployment/m1-credit-simulation-service-deployment-service.yaml
 kubectl apply -f deployment/m2-user-registration-service-deployment-service.yaml -n $NAMESPACE
 
 Write-Host "Esperando que los pods estén disponibles..."
-# Opcional: esperar a que los deployments estén en estado Available.
-# Estos comandos pueden fallar si los pods tardan demasiado.
-# Puedes ajustar el timeout o ignorar los errores.
 
-try {
-    kubectl wait --for=condition=Available deployment/config-server-deployment -n $NAMESPACE --timeout=180s
-} catch {}
-try {
-    kubectl wait --for=condition=Available deployment/eureka-server-deployment -n $NAMESPACE --timeout=180s
-} catch {}
-try {
-    kubectl wait --for=condition=Available deployment/gateway-server-deployment -n $NAMESPACE --timeout=180s
-} catch {}
-try {
-    kubectl wait --for=condition=Available deployment/m1-credit-simulation-service-deployment -n $NAMESPACE --timeout=180s
-} catch {}
-try {
-    kubectl wait --for=condition=Available deployment/m2-user-registration-service-deployment -n $NAMESPACE --timeout=180s
-} catch {}
+# Lista de deployments para esperar su disponibilidad
+$deployments = @(
+    "config-server-deployment",
+    "eureka-server-deployment",
+    "gateway-server-deployment",
+    "m1-credit-simulation-service-deployment",
+    "m2-user-registration-service-deployment"
+)
+
+foreach ($deployment in $deployments) {
+    try {
+        Write-Host "Esperando que $deployment esté disponible..."
+        kubectl wait --for=condition=Available deployment/$deployment -n $NAMESPACE --timeout=180s
+        Write-Host "Deployment $deployment está disponible."
+    } catch {
+        Write-Host "Error: Timed out esperando que $deployment esté disponible."
+    }
+}
 
 Write-Host "Estado final de Pods:"
 kubectl get pods -o wide -n $NAMESPACE
