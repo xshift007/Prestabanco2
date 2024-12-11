@@ -32,11 +32,11 @@ spec:
               value: "%"
             # Eliminamos las siguientes líneas porque ya no usamos MYSQL_USER
             # - name: MYSQL_USER
-            - name: MYSQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-credentials
-                  key: DB_PASSWORD_M1
+            # - name: MYSQL_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: mysql-credentials
+            #       key: DB_PASSWORD_M1
           ports:
             - containerPort: 3306
 ---
