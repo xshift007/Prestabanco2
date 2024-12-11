@@ -60,7 +60,8 @@ spec:
 
             # URL del datasource construida con las variables anteriores
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?useSSL=false"
+              value: "jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true"
+
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

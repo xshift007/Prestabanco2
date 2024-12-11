@@ -17,6 +17,7 @@ spec:
       containers:
         - name: m1-db
           image: mysql:8.0
+          args: [ "--default-authentication-plugin=mysql_native_password" ]
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -40,7 +41,6 @@ spec:
                   key: DB_PASSWORD_M1
             - name: MYSQL_ROOT_HOST
               value: "%"
-
           ports:
             - containerPort: 3306
 ---

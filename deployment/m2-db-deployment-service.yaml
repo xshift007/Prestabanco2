@@ -17,6 +17,7 @@ spec:
       containers:
         - name: m2-db
           image: mysql:8.0
+          args: [ "--default-authentication-plugin=mysql_native_password" ]
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
