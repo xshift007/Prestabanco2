@@ -4,8 +4,8 @@
     <file url="file://$PROJECT_DIR$/config-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway-server/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/m1-credit-simulation-service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/m2-user-registration-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/m3-loan-application-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/prestabanco-solicitudes/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/prestabanco-usuario/src/main/java" charset="UTF-8" />
   </component>
 </project>
